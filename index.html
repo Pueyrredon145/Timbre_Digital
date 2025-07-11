@@ -121,6 +121,15 @@
             font-size: 1em; 
             box-sizing: border-box;
         }
+        /* ESTILO AÑADIDO: Advertencia */
+        .warning-text { 
+            font-size: 0.9em;
+            color: #d32f2f; /* Un rojo más suave para advertencias */
+            margin-top: -10px; /* Ajusta el margen para que esté cerca del input */
+            margin-bottom: 10px;
+            text-align: center;
+            font-weight: bold;
+        }
         .modal-buttons {
             display: flex;
             justify-content: space-around;
@@ -197,6 +206,8 @@
             <label for="visitorPhone">Tu número de teléfono (opcional):</label>
             <input type="tel" id="visitorPhone" placeholder="Ej: 5491123456789" inputmode="numeric">
             
+            <p class="warning-text">¡IMPORTANTE! No modifiques el mensaje de WhatsApp que se genere.</p>
+            
             <div class="modal-buttons">
                 <button class="confirm-button" onclick="confirmarEnvio()">OK</button>
                 <button class="cancel-button" onclick="cerrarModal()">Cancelar</button>
@@ -271,7 +282,7 @@
             
             let whatsappMessage = '';
             let targetPhoneNumber = '';
-            let contactInfoPart = ''; // Cambiamos el nombre para que sea más genérico
+            let contactInfoPart = ''; 
 
             // Obtener el nombre del inquilino (o "Diego" para administración)
             const tenantName = (currentDepartment === "Administración") ? "Diego" : (departmentToTenant[currentDepartment] || currentDepartment);
@@ -280,7 +291,7 @@
             if (visitorPhone) {
                 contactInfoPart = ` Si querés contactarlo escribile a ${visitorPhone}`;
             } else {
-                contactInfoPart = ` No dejó ningún número de contacto`; // <-- Todos ceros para automatización
+                contactInfoPart = ` No dejó ningún número de contacto`; 
             }
 
             // Lógica condicional para el botón de Administración
