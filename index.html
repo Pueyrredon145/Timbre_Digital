@@ -195,7 +195,7 @@
             <input type="text" id="visitorName" placeholder="Ej: Juan" required>
 
             <label for="visitorPhone">Tu número de teléfono (opcional):</label>
-            <input type="tel" id="visitorPhone" placeholder="Ej: 5491123456789" inputmode="numeric" pattern="[0-9]*">
+            <input type="tel" id="visitorPhone" placeholder="Ej: 5491123456789" inputmode="numeric">
             
             <div class="modal-buttons">
                 <button class="confirm-button" onclick="confirmarEnvio()">OK</button>
@@ -206,7 +206,7 @@
 
     <script>
         // ¡NÚMERO DE WHATSAPP HUB PARA LOS DEPARTAMENTOS!
-        const WHATSAPP_HUB_NUMBER = '5493855874793'; 
+        const WHATSAPP_HUB_NUMBER = '5493855026293'; 
 
         // ¡TU NÚMERO DE WHATSAPP PERSONAL PARA ADMINISTRACIÓN!
         const WHATSAPP_ADMIN_NUMBER = '5493855026293'; // <-- ¡Este es tu número Diego!
@@ -227,7 +227,7 @@
                 currentDepartment = button.dataset.department;
                 document.getElementById('modalTitle').innerText = `Contactar ${currentDepartment}`;
                 document.getElementById('visitorName').value = ''; 
-                document.getElementById('visitorPhone').value = ''; // Limpiar el campo del teléfono
+                document.getElementById('visitorPhone').value = ''; 
                 document.getElementById('visitorName').focus(); 
                 document.getElementById('contactModal').style.display = 'flex'; 
             });
@@ -238,12 +238,35 @@
         }
 
         function confirmarEnvio() {
-            const visitorName = document.getElementById('visitorName').value.trim();
-            const visitorPhone = document.getElementById('visitorPhone').value.trim(); // Obtener el número de teléfono
+            const visitorNameInput = document.getElementById('visitorName');
+            const visitorPhoneInput = document.getElementById('visitorPhone');
 
+            let visitorName = visitorNameInput.value.trim();
+            let visitorPhone = visitorPhoneInput.value.trim();
+
+            // --- Validación del Nombre (máximo 2 palabras) ---
             if (!visitorName) {
                 alert('Por favor, ingresa tu nombre.');
+                visitorNameInput.focus();
                 return;
+            }
+            const nameWords = visitorName.split(/\s+/).filter(word => word.length > 0);
+            if (nameWords.length > 2) {
+                alert('Por favor, ingresa tu nombre con un máximo de dos palabras.');
+                visitorNameInput.focus();
+                return;
+            }
+
+            // --- Validación del Teléfono (sin espacios) ---
+            if (visitorPhone) { // Solo validar si el campo no está vacío
+                const phoneWithoutSpaces = visitorPhone.replace(/\s/g, ''); // Eliminar todos los espacios
+                if (phoneWithoutSpaces !== visitorPhone) {
+                    alert('Por favor, ingresa tu número de teléfono sin espacios.');
+                    visitorPhoneInput.value = phoneWithoutSpaces; // Opcional: corregir el campo automáticamente
+                    visitorPhoneInput.focus();
+                    return;
+                }
+                visitorPhone = phoneWithoutSpaces; // Usar la versión sin espacios para el mensaje
             }
             
             let whatsappMessage = '';
