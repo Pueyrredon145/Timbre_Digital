@@ -206,7 +206,7 @@
 
     <script>
         // ¡NÚMERO DE WHATSAPP HUB PARA LOS DEPARTAMENTOS!
-        const WHATSAPP_HUB_NUMBER = '5493855874793'; // <-- ¡Número del HUB actualizado!
+        const WHATSAPP_HUB_NUMBER = '5493855874793'; 
 
         // ¡TU NÚMERO DE WHATSAPP PERSONAL PARA ADMINISTRACIÓN!
         const WHATSAPP_ADMIN_NUMBER = '5493855026293'; 
@@ -271,28 +271,26 @@
             
             let whatsappMessage = '';
             let targetPhoneNumber = '';
-            let phoneMessagePart = '';
+            let contactInfoPart = ''; // Cambiamos el nombre para que sea más genérico
 
-            // Construir la parte del mensaje del teléfono
+            // Obtener el nombre del inquilino (o "Diego" para administración)
+            const tenantName = (currentDepartment === "Administración") ? "Diego" : (departmentToTenant[currentDepartment] || currentDepartment);
+
+            // Construir la parte de la información de contacto
             if (visitorPhone) {
-                // Si el visitante deja un número
-                phoneMessagePart = ` Si querés contactarlo escribile a ${visitorPhone}`;
+                contactInfoPart = ` ${tenantName}, si querés contactarlo escribile a ${visitorPhone}`;
             } else {
-                // Si el visitante NO deja un número
-                phoneMessagePart = ` Si querés contactarlo escribile a 0000000000`; // <-- Todos ceros para automatización
+                contactInfoPart = ` ${tenantName}, si querés contactarlo escribile a 0000000000`; // <-- Todos ceros para automatización
             }
 
             // Lógica condicional para el botón de Administración
             if (currentDepartment === "Administración") {
                 targetPhoneNumber = WHATSAPP_ADMIN_NUMBER;
-                whatsappMessage = `Hola Diego, soy ${visitorName} y estoy en la puerta de Pueyrredon 145.${phoneMessagePart}`;
+                whatsappMessage = `Hola Diego, soy ${visitorName} y estoy en la puerta de Pueyrredon 145.${contactInfoPart}`;
             } else {
                 // Para el resto de departamentos, usa la lógica anterior con el HUB
                 targetPhoneNumber = WHATSAPP_HUB_NUMBER;
-                const tenantName = departmentToTenant[currentDepartment] || currentDepartment;
-                whatsappMessage = `Hola ${tenantName}, ${visitorName} está en la puerta del edificio.`;
-                // Integrar el nombre del inquilino antes del mensaje de contacto
-                whatsappMessage += `${phoneMessagePart}`; // Asegúrate de que esta parte se agregue para todos
+                whatsappMessage = `Hola ${tenantName}, ${visitorName} está en la puerta del edificio.${contactInfoPart}`;
             }
 
             const encodedMessage = encodeURIComponent(whatsappMessage);
